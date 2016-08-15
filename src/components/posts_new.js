@@ -1,9 +1,30 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import { createPost } from '../actions/index';
 import { Link } from 'react-router';
 
 class PostsNew extends Component {
+  // React will search all parent components
+  // until it finds a prop "router"
+  // then set it to:
+  //  this.context.router
+  static contextTypes = {
+    router: PropTypes.object
+  };
+
+  onSubmit(props) {
+    // This returns a promise
+    this.props.createPost(props)
+      .then(() => {
+        // Blog post has been created
+        // navigate the user to the index
+        // By calling this.context.router.push
+        // with the new path to navigate to
+
+        this.context.router.push('/');
+      });
+  }
+
   render() {
     const {
       fields: {
@@ -17,7 +38,7 @@ class PostsNew extends Component {
     return (
       // If the form is valid "onSubmit"
       // this.props.createPost will be called with the form values
-      <form onSubmit={handleSubmit(this.props.createPost)}>
+      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <h3>
           Create a New Post
         </h3>
