@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { reduxForm } from 'redux-form';
+import { createPost } from '../actions/index';
 
 class PostsNew extends Component {
   render() {
@@ -13,7 +14,9 @@ class PostsNew extends Component {
     } = this.props;
 
     return (
-      <form onSubmit={handleSubmit}>
+      // If the form is valid "onSubmit"
+      // this.props.createPost will be called with the form values
+      <form onSubmit={handleSubmit(this.props.createPost)}>
         <h3>
           Create a New Post
         </h3>
@@ -56,6 +59,19 @@ class PostsNew extends Component {
 //     }
 //   }
 // }
+
+// connect:
+//  1st is mapStateToProps
+//  2nd is mapDispatchToProps
+//
+// reduxForm
+//  1st is form config
+//  2nd is mapStateToProps
+//  3rd is mapDispatchToProps
+
+// Can be used similarly as connect()
+// can inject action creators into component
+// and create a container
 export default reduxForm({
   form: 'PostsNewForm',
   // Tells reduxForm to watch for these inputs
@@ -64,4 +80,4 @@ export default reduxForm({
     'categories',
     'content'
   ]
-})(PostsNew);
+}, null, { createPost })(PostsNew);
